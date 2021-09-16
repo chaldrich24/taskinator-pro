@@ -91,6 +91,43 @@ $("#remove-tasks").on("click", function() {
   saveTasks();
 });
 
+$(".list-group").on("click", "p", function() {
+  var text = $(this)
+    .text();
+  console.log(tasks);
+
+  var textInput = $("<textarea>")
+    .addClass("form-control")
+    .val(text);
+  $(this).replaceWith(textInput);
+  textInput.trigger("focus");
+});
+
+$(".list-group").on("blur", "textarea", function() {
+  var text = $(this)
+    .val()
+    .trim();
+  
+  var status = $(this)
+    .closest(".list-group")
+    .attr("id")
+    .replace("list-", "");
+
+  var index = $(this)
+    .closest(".list-group-item")
+    .index();
+  
+  tasks[status][index].text = text;
+  saveTasks();
+
+  // recreate p element
+  var taskP = $("<p>")
+  .addClass("m-1")
+  .text(text);
+
+  $(this).replaceWith(taskP);
+});
+
 // load tasks for the first time
 loadTasks();
 
