@@ -122,12 +122,53 @@ $(".list-group").on("blur", "textarea", function() {
 
   // recreate p element
   var taskP = $("<p>")
-  .addClass("m-1")
-  .text(text);
+    .addClass("m-1")
+    .text(text);
 
   $(this).replaceWith(taskP);
 });
 
+$(".list-group").on("click", "span", function() {
+  // get current text
+  var date = $(this)
+    .text()
+    .trim();
+
+  // create new input element
+  var dateInput = $("<input>")
+    .attr("type", "text")
+    .addClass("form-control")
+    .val(date);
+
+  $(this).replaceWith(dateInput);
+
+  // automatically focus on new element
+  dateInput.trigger("focus");
+});
+
+$(".list-group").on("blur","input[type='text']", function() {
+  var date = $(this)
+    .val()
+    .trim();
+  
+  var status = $(this)
+    .closest(".list-group")
+    .attr("id")
+    .replace("list-", "");
+
+  var index = $(this)
+    .closest(".list-group-item")
+    .index();
+
+  tasks[status][index].date = date;
+  saveTasks();
+
+  var taskSpan = $("<span>")
+    .addClass("badge badge-primary badge-pill")
+    .text(date);
+
+  $(this).replaceWith(taskSpan);
+});
 // load tasks for the first time
 loadTasks();
 
